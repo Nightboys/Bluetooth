@@ -1,0 +1,101 @@
+view {
+    display: inline-block;
+}
+
+.container {
+    padding: 0 10px;
+    margin: 0;
+    align-items: flex-start;
+}
+
+.section {
+    display: inline-block;
+    width: 100%;
+    margin-top: 50rpx;
+    position: relative;
+}
+
+.list {
+    margin-left: 20rpx;
+}
+
+.content {
+    margin-left: 100rpx;
+    padding: auto;
+    position: absolute;
+    top: 5rpx;
+    left: 10rpx;
+}
+
+.switch {
+    position: relative;
+    float: right;
+    margin-right: 100rpx;
+}
+
+button.active {
+    background: #04be02 !important;
+    color: #fff;
+}
+
+.list-item {
+    margin-top: 20rpx;
+    margin-bottom: 20rpx;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ddd;
+}
+
+.list-item .lf-txt {
+    width: 80%;
+}
+
+.list-item .lf-txt text {
+    width: 100%;
+    display: block;
+}
+
+.list-item button {
+    background: green;
+    color: #fff;
+    padding: 5px 10px;
+    white-space: nowrap;
+    line-height: normal;
+}
+
+.recieve {
+    width: 100%;
+}
+
+.recieve-textarea {
+    width: 100%;
+    margin-top: 10dpx;
+}
+
+.sendMsg {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.sendMsg form {
+    width: 100%;
+}
+
+.sendMsg input {
+    display: block;
+    width: 80%;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 5px;
+    border: 1px dashed #ddd;
+    margin: 10px 0;
+}
+
+.sendMsg button {
+    background: green;
+    color: #fff;
+    margin: 0 10px;
+}

@@ -1,0 +1,49 @@
+<view class="container">
+
+    <view class="section">
+        <!-- 第一行 -->
+        <view class="content">
+            <text>蓝牙开关</text>
+        </view>
+        <view class="switch">
+            <switch checked="{{isbluetoothready}}" bindchange="open_BLE" />
+        </view>
+    </view>
+
+    <view class="section">
+        <!-- 第二行 -->
+        <button type="default" size="{{primarySize}}" plain="{{plain}}" disabled="{{disabled}}" bindtap="search_BLE" class='{{searchingstatus?"":"active"}}'> {{searchingstatus?"停止搜索":"开始搜索"}} </button>
+    </view>
+
+    <block wx:for="{{list}}">
+        <!-- 第三行 -->
+        <view class="section list-item" style="flex-direction:row">
+            <view class='lf-txt'>
+                <text>设备名称:  {{item.name}}</text>
+                <text>MAC地址:   {{item.deviceId}}</text>
+            </view>
+            <view class="connection">
+                <button id="{{item.deviceId}}" class='{{item.connectState?"active":""}}' size="mini" bindtap="connectTO"> {{item.connectState?"已连接":"连接"}} </button>
+            </view>
+        </view>
+    </block>
+
+    <block wx:if="{{deviceconnected}}">
+        <!-- 第四行 -->
+        <view class='recieve'>
+            <text>数据接收</text>
+            <text class='.recieve-textarea'>{{receive_data}}</text>
+            <!-- <button size="mini" bindtap="receiveMessages">接收</button> -->
+        </view>
+
+        <view class="sendMsg">
+            <form bindsubmit="formSubmit">
+                <text>数据发送:</text>
+                <input name="senddata" placeholder='请输入指令：'/>
+                <button size="mini" formType="submit">发送</button>
+                <button size="mini" formType="reset">清空</button>
+            </form>
+        </view>
+    </block>
+
+</view>
