@@ -15,7 +15,6 @@ view {
     position: relative;
 }
 
-
 .list {
     margin-left: 20rpx;
 }
@@ -34,10 +33,15 @@ view {
     margin-right: 100rpx;
 }
 
+button.active {
+    background: #04be02 !important;
+    color: #fff;
+}
+
 .list-item {
     margin-top: 20rpx;
     margin-bottom: 20rpx;
-    padding:10px;
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -57,7 +61,7 @@ view {
 .list-item button {
     background: green;
     color: #fff;
-    padding:5px 10px;
+    padding: 5px 10px;
     white-space: nowrap;
     line-height: normal;
 }
@@ -71,12 +75,12 @@ view {
     margin-top: 10dpx;
 }
 
-.sendMsg{
+.sendMsg {
     width: 100%;
-    margin:20px 0;
+    margin: 20px 0;
 }
 
-.sendMsg form{
+.sendMsg form {
     width: 100%;
 }
 
@@ -87,11 +91,11 @@ view {
     line-height: 40px;
     border-radius: 5px;
     border: 1px dashed #ddd;
-    margin:10px 0;
+    margin: 10px 0;
 }
 
-.sendMsg button{
+.sendMsg button {
     background: green;
     color: #fff;
-    margin:0 10px;
+    margin: 0 10px;
 }

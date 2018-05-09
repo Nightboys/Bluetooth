@@ -18,7 +18,8 @@ Page({
         onreceiving: false,
         id_text: string_temp,
         list: [],
-        receive_data: 'none  '
+        receive_data: 'none',
+        deviceconnected:false
     },
     onLoad: function () {
 
@@ -48,9 +49,9 @@ Page({
                 success: function (res) {
                     var available = res.available
                     if (!available) {
-                        setTimeout(function(){
+                        setTimeout(function () {
                             that.search_BLE();
-                        },1000)
+                        }, 1000)
                     }
                     else {
                         wx.showToast({
@@ -188,39 +189,66 @@ Page({
             }
         });
 
-        wx.showLoading({
-            title: '连接蓝牙设备中...',
-        });
+        //断开与低功耗蓝牙设备的连接
+        /*wx.closeBLEConnection({
+            deviceId: deviceId,
+            success: function (res) {
+                that.setData({
+                    deviceconnected: !that.data.deviceconnected,
+                    connectedDeviceId: e.currentTarget.id,
+                    list: newList
+                });
+            }
+        })*/
+        
+        if (that.data.deviceconnected && e.currentTarget.id != that.data.connectedDeviceId){
+            wx.showToast({
+                title: '请先断开已连接设备',
+                icon: 'success'
+            });
+            return;
+        }
+
+        console.log("ddddd", that.data.deviceconnected);    //初始值null
 
         console.log("点击设备", e);
 
         wx.createBLEConnection({
             deviceId: e.currentTarget.id,
             success: function (res) {
-                wx.hideLoading();
-                wx.showToast({
-                    title: '连接成功',
-                    icon: 'success',
-                    duration: 1000
-                });
+                // wx.hideLoading();
+                if (!that.data.deviceconnected) {
+                    wx.showToast({
+                        title: '连接成功',
+                        icon: 'success'
+                    });
+                }
 
                 console.log("连接成功", res);
 
-                setTimeout(function(){
-                    var newList = that.data.list;
-                    for (var i = 0; i < newList.length; i++) {
-                        if (newList[i].deviceId == e.currentTarget.id) {
-                            newList[i].connectState = !newList[i].connectState;
-                        }
+                var newList = that.data.list;
+                for (var i = 0; i < newList.length; i++) {
+                    if (newList[i].deviceId == e.currentTarget.id) {
+                        newList[i].connectState = !newList[i].connectState;
                     }
+                }
 
-                    that.setData({
-                        deviceconnected: !that.data.deviceconnected,
-                        connectedDeviceId: e.currentTarget.id,
-                        list: newList
-                    });
+                that.setData({
+                    deviceconnected: !that.data.deviceconnected,
+                    connectedDeviceId: e.currentTarget.id,
+                    list: newList
+                });
 
-                },1000);
+                setTimeout(function () {
+                    if (!that.data.deviceconnected) {
+                        wx.showToast({
+                            title: '断开连接',
+                            icon: 'success',
+                            duration: 1000
+                        });
+                        return;
+                    }
+                }, 1000);
 
 
                 setTimeout(function () {

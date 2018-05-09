@@ -12,7 +12,7 @@
 
     <view class="section">
         <!-- 第二行 -->
-        <button type="default" size="{{primarySize}}" plain="{{plain}}" disabled="{{disabled}}" bindtap="search_BLE"> {{searchingstatus?"停止搜索":"开始搜索"}} </button>
+        <button type="default" size="{{primarySize}}" plain="{{plain}}" disabled="{{disabled}}" bindtap="search_BLE" class='{{searchingstatus?"":"active"}}'> {{searchingstatus?"停止搜索":"开始搜索"}} </button>
     </view>
 
     <block wx:for="{{list}}">
@@ -23,7 +23,7 @@
                 <text>MAC地址:   {{item.deviceId}}</text>
             </view>
             <view class="connection">
-                <button id="{{item.deviceId}}" size="mini" bindtap="connectTO"> {{item.connectState?"已连接":"连接"}} </button>
+                <button id="{{item.deviceId}}" class='{{item.connectState?"active":""}}' size="mini" bindtap="connectTO"> {{item.connectState?"已连接":"连接"}} </button>
             </view>
         </view>
     </block>
