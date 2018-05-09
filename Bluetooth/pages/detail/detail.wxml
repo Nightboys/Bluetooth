@@ -1,0 +1,14 @@
+<view class='bluetooth-detail'>
+    <view>当前连接的蓝牙设备是：</view>
+    <view>设备名：{{name}}</view>
+    <view>设备ID：{{deviceId}}</view>
+</view>
+
+<view class='btnButton'>
+    <button bindtap='closeConnect' style='width:90%'>断开连接</button>
+</view>
+
+<view class='btnButton'>
+    <button bindtap='openMsg'>开机-发送数据</button>
+    <button bindtap='closeMsg'>关机-停止发送</button>
+</view>

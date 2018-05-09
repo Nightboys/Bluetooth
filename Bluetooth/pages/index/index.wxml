@@ -1,0 +1,22 @@
+<!--index.wxml-->
+<view class='btnButton'>
+    <button bindtap='startConnect'>获取蓝牙设备</button>
+</view>
+
+  <!-- <view class='bluetooth-list'>
+        <view class='mac-name'>
+            <text>item.name</text>
+            <text class='small'>item.deviceId</text>
+        </view>
+        <view class='connect' data-name='liu' data-deviceId='ndfjvbd' bindtap='connectBluetooth'>连接</view>
+</view>   -->
+
+<block wx:if="{{flag}}">
+    <view wx:for="{{BluetoothList}}" class='bluetooth-list'>
+        <view class='mac-name'>
+            <text>{{item.name}}</text>
+            <text class='small'>{{item.deviceId}}</text>
+        </view>
+        <view class='connect' data-name='{{item.name}}' data-deviceId='{{item.deviceId}}' bindtap='connectBluetooth'>连接</view>
+    </view>   
+</block>

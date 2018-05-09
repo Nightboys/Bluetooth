@@ -1,0 +1,20 @@
+.bluetooth-detail{
+    width: 95%;
+    margin: 50px auto 0;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ddd;
+}
+
+.btnButton {
+    margin: 20px auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.btnButton button {
+    width: 40%;
+    color: #fff;
+    background: #0aba07;
+}

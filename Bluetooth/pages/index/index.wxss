@@ -1,0 +1,45 @@
+/**index.wxss**/
+
+.btnButton {
+    margin: 20px;
+}
+
+.btnButton button {
+    color: #fff;
+    background: #0aba07;
+}
+
+.bluetooth-list {
+    width: 95%;
+    margin: 0 auto;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.bluetooth-list .mac-name {
+    max-width: 80%;
+}
+
+.bluetooth-list .mac-name text {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.bluetooth-list .mac-name text.small {
+    font-size: 12px;
+    color: #999;
+}
+
+.bluetooth-list .connect {
+    color: #fff;
+    background: #0aba07;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
