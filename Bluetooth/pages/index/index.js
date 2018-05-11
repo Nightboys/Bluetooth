@@ -475,7 +475,7 @@ Page({
                         success: function (res) {
                             console.log("当前连接的设备", res)
                         }
-                    })
+                    });
                 }, 200);
 
                 setTimeout(function (res) {
@@ -490,12 +490,19 @@ Page({
                                         wx.hideToast();
                                     }
                                 });
+                                console.log("serviceId列表", arr);
+
+                                // wx.showModal({
+                                //     title: 'serviceId列表',
+                                //     content: arr.join('\n'),
+                                // })
 
                             }, 2000);
 
                             // that.getCharacter(that.data.deviceId, services);
                         }
                     });
+
                 }, 500);
             },
             fail: function () {
@@ -519,6 +526,7 @@ Page({
 
         console.log("点击设备", e);
 
+        that.stopConnectDevices();  //配对之前先断开已连接设备
         wx.showLoading({
             title: '正在连接，请稍后',
             mask: true

@@ -19,51 +19,66 @@ Page({
         id_text: string_temp,
         list: [],
         receive_data: 'none',
-        deviceconnected:false
+        deviceconnected: false
     },
+
+    /**
+     * 生命周期函数--监听页面加载
+     */
     onLoad: function () {
 
     },
+
     open_BLE: function () {
         var that = this;
 
         that.setData({
             isbluetoothready: !that.data.isbluetoothready
-        })
+        });
+
         if (that.data.isbluetoothready) {   //蓝牙开关打开
             //开启蓝牙模块并初始化  
             wx.openBluetoothAdapter({
                 success: function (res) {
                     console.log("蓝牙已打开", res);
+
+                    //检查蓝牙模块是否初始化成功  
+                    wx.getBluetoothAdapterState({
+                        success: function (res) {
+                            var available = res.available;  //蓝牙适配器是否可用
+
+                            console.log("蓝牙初始化状态", res);
+
+                            if (available) {
+                                setTimeout(function () {
+                                    that.search_BLE();
+                                }, 1000)
+                            }
+                            else {
+                                wx.showToast({
+                                    title: '蓝牙初始化失败',
+                                    icon: 'success',
+                                    duration: 2000
+                                });
+                                console.log("蓝牙初始化失败", res);
+                            }
+                        }
+                    });
+
                 },
                 fail: function (res) {
                     wx.showModal({
                         title: '提示',
                         content: '请检查手机蓝牙是否打开',
-                    })
+                        showCancel: false,
+                        success: function (res) {
+                            that.setData({
+                                isbluetoothready: !that.data.isbluetoothready
+                            })
+                        }
+                    });
                 }
             });
-
-            //检查蓝牙模块是否初始化成功  
-            wx.getBluetoothAdapterState({
-                success: function (res) {
-                    var available = res.available
-                    if (!available) {
-                        setTimeout(function () {
-                            that.search_BLE();
-                        }, 1000)
-                    }
-                    else {
-                        wx.showToast({
-                            title: '蓝牙初始化成功',
-                            icon: 'success',
-                            duration: 2000
-                        });
-                        console.log("蓝牙初始化成功", res);
-                    }
-                }
-            });
-
         }
         else {                          //蓝牙开关关闭
             wx.closeBLEConnection({
@@ -72,7 +87,7 @@ Page({
                     that.setData({
                         deviceconnected: false,
                         connectedDeviceId: ""
-                    })
+                    });
                     wx.showToast({
                         title: '蓝牙连接断开',
                         icon: 'success',
@@ -83,7 +98,7 @@ Page({
             setTimeout(function () {
                 that.setData({
                     list: []
-                })
+                });
                 //释放蓝牙适配器  
                 wx.closeBluetoothAdapter({
                     success: function (res) {
@@ -200,8 +215,8 @@ Page({
                 });
             }
         })*/
-        
-        if (that.data.deviceconnected && e.currentTarget.id != that.data.connectedDeviceId){
+
+        if (that.data.deviceconnected && e.currentTarget.id != that.data.connectedDeviceId) {
             wx.showToast({
                 title: '请先断开已连接设备',
                 icon: 'success'
@@ -209,7 +224,7 @@ Page({
             return;
         }
 
-        console.log("ddddd", that.data.deviceconnected);    //初始值null
+        console.log("是否处于连接状态", that.data.deviceconnected);    //初始值null
 
         console.log("点击设备", e);
 
@@ -332,6 +347,8 @@ Page({
         let buffer = new ArrayBuffer(senddata.length);
         let dataView = new DataView(buffer);
 
+        console.log("数据转码之前", senddata);
+
         //写入通道指令 
         for (var i = 0; i < senddata.length; i++) {
             dataView.setUint8(i, senddata.charAt(i).charCodeAt())
@@ -352,6 +369,13 @@ Page({
             success: function (res) {
                 wx.showToast({
                     title: '发送成功',
+                    icon: 'success',
+                    duration: 2000
+                })
+            },
+            fail: function (res) {
+                wx.showToast({
+                    title: '发送失败,蓝牙不匹配',
                     icon: 'success',
                     duration: 2000
                 })

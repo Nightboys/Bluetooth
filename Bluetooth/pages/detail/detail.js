@@ -11,10 +11,16 @@ Page({
     data: {
         deviceId: '',
         name: '',
+        deviceId_Tx: '',
         serviceId: '0000FEE0-0000-1000-8000-00805F9B34FB',
         characteristicId: '0000FEE1-0000-1000-8000-00805F9B34FB',
-        // serviceId: '0000fff0-0000-1000-8000-00805f9b34fb',  //蓝牙特征值对应服务的 uuid
-        // characteristicId: '0000fff1-0000-1000-8000-00805f9b34fb', //蓝牙特征值的 uuid  
+
+        //此处deviceId和characteristicId需完全匹配，字母应全部大写
+        
+        // deviceId_Tx: 'D4:F5:13:6E:C3:C8',
+        // serviceId: '0000FFF0-0000-1000-8000-00805F9B34FB',//特征值对应服务的uuid
+        // characteristicId: '0000FFF1-0000-1000-8000-00805F9B34FB', //特征值uuid  
+
         CMD_OPEN: [115, 16, 16],     //开机
         CMD_CLOSE: [115, 17, 17]     //关机   
     },
@@ -26,7 +32,8 @@ Page({
         console.log(options);
         this.setData({
             deviceId: options.deviceId,
-            name: options.name
+            name: options.name,
+            deviceId_Tx: options.deviceId
         });
     },
 
@@ -112,10 +119,11 @@ Page({
         }); */
 
         wx.getBLEDeviceCharacteristics({
-            deviceId: that.data.deviceId,
+            deviceId: that.data.deviceId_Tx,
             // 这里的 serviceId 需要在上面的 getBLEDeviceServices 接口中获取
             serviceId: that.data.serviceId,   //蓝牙服务 uuid
             success: function (res) {
+                console.log('该设备的MAC', that.data.serviceId);
                 console.log('该ID设备的特征值', res);
 
                 setTimeout(function () {
@@ -126,9 +134,15 @@ Page({
             fail: function (res) {
                 console.log('获取特征值失败', res);
                 console.log('serviceId的值', that.data.serviceId);
-                wx.showToast({
-                    title: '蓝牙设备不匹配',
-                });
+                // wx.showToast({
+                //     title: '蓝牙设备不匹配',
+                // });
+
+                wx.showModal({
+                    title: '错误信息',
+                    content: "errCode:"+res.errCode+"\n"+"errMsg:"+res.errMsg,
+                })
+
                 setTimeout(function () {
                     wx.hideToast();
                 }, 2000);
@@ -143,7 +157,7 @@ Page({
 
         wx.writeBLECharacteristicValue({
             // 这里的 deviceId 需要在上面的 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取
-            deviceId: that.data.deviceId,
+            deviceId: that.data.deviceId_Tx,
             // 这里的 serviceId 需要在上面的 getBLEDeviceServices 接口中获取
             serviceId: that.data.serviceId,
             // 这里的 characteristicId 需要在上面的 getBLEDeviceCharacteristics 接口中获取
@@ -225,7 +239,7 @@ Page({
     //监听低功耗蓝牙设备的特征值变化。必须先启用notify接口才能接收到设备推送的notification
     characteristicValueChange: function () {
         wx.onBLECharacteristicValueChange(function (res) {
-            console.log("特征值变化",res);
+            console.log("特征值变化", res);
             console.log(ab2hext(res.value));
         })
     },

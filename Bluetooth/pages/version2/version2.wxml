@@ -15,18 +15,20 @@
         <button type="default" size="{{primarySize}}" plain="{{plain}}" disabled="{{disabled}}" bindtap="search_BLE" class='{{searchingstatus?"":"active"}}'> {{searchingstatus?"停止搜索":"开始搜索"}} </button>
     </view>
 
-    <block wx:for="{{list}}">
-        <!-- 第三行 -->
-        <view class="section list-item" style="flex-direction:row">
-            <view class='lf-txt'>
-                <text>设备名称:  {{item.name}}</text>
-                <text>MAC地址:   {{item.deviceId}}</text>
+    <view class='list-box'>
+        <block wx:for="{{list}}">
+            <!-- 第三行 -->
+            <view class="section list-item" style="flex-direction:row">
+                <view class='lf-txt'>
+                    <text>设备名称:  {{item.name}}</text>
+                    <text>MAC地址:   {{item.deviceId}}</text>
+                </view>
+                <view class="connection">
+                    <button id="{{item.deviceId}}" class='{{item.connectState?"active":""}}' size="mini" bindtap="connectTO"> {{item.connectState?"已连接":"连接"}} </button>
+                </view>
             </view>
-            <view class="connection">
-                <button id="{{item.deviceId}}" class='{{item.connectState?"active":""}}' size="mini" bindtap="connectTO"> {{item.connectState?"已连接":"连接"}} </button>
-            </view>
-        </view>
-    </block>
+        </block>
+    </view>
 
     <block wx:if="{{deviceconnected}}">
         <!-- 第四行 -->
@@ -39,7 +41,7 @@
         <view class="sendMsg">
             <form bindsubmit="formSubmit">
                 <text>数据发送:</text>
-                <input name="senddata" placeholder='请输入指令：'/>
+                <input name="senddata" placeholder='请输入指令：' focus='true'/>
                 <button size="mini" formType="submit">发送</button>
                 <button size="mini" formType="reset">清空</button>
             </form>
