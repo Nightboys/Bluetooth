@@ -1,9 +1,20 @@
-.bluetooth-detail{
+.bluetooth-detail {
     width: 95%;
-    margin: 50px auto 0;
+    margin: 0 auto;
     padding: 10px 20px;
     box-sizing: border-box;
     border-bottom: 1px solid #ddd;
+}
+
+.switch-view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+}
+
+.switch-view switch {
+    margin: 0 10px;
 }
 
 .btnButton {
@@ -17,4 +28,16 @@
     width: 40%;
     color: #fff;
     background: #0aba07;
+}
+
+.section {
+    width: 80%;
+    margin: 20px auto;
+    display: block;
+}
+
+.section .section__title {
+    text-align: center;
+    margin: 0 auto;
+    display: block;
 }

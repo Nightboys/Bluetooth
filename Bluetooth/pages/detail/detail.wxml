@@ -4,11 +4,44 @@
     <view>设备ID：{{deviceId}}</view>
 </view>
 
+ <!-- <view class='switch-view'>
+    开机 <switch bindchange="switchChange"></switch> 关机
+</view>  -->
+
+<view class='btnButton'>
+    <button bindtap='openMsg'>开机</button>
+    <button bindtap='closeMsg'>关机</button>
+</view>
+
+<view class="section">
+  <text class="section__title">电流调节(A)</text>
+  <view class="body-view">
+    <slider value="{{electric}}" bindchange="sliderChange1" min="0" max="200" backgroundColor="#ddd"  block-color="#0aba07" block-size="15" show-value/>
+  </view>
+</view>
+
+<view class="section">
+  <text class="section__title">引弧电流(y)</text>
+  <view class="body-view">
+    <slider value='{{art_strike}}' bindchange="sliderChange2" min="0" max="100" backgroundColor="#ddd"  block-color="#0aba07" block-size="15" show-value/>
+  </view>
+</view>
+
+<view class="section">
+  <text class="section__title">推力电流(t)</text>
+  <view class="body-view">
+    <slider value='{{thrust}}' bindchange="sliderChange3" min="0" max="100" backgroundColor="#ddd"  block-color="#0aba07" block-size="15" show-value/>
+  </view>
+</view>
+
+<view class='btnButton'>
+    <button bindtap='updataSDK' style='width:90%'>开始升级</button>
+</view>
+
+
 <view class='btnButton'>
     <button bindtap='closeConnect' style='width:90%'>断开连接</button>
 </view>
 
-<view class='btnButton'>
-    <button bindtap='openMsg'>开机-发送数据</button>
-    <button bindtap='closeMsg'>关机-停止发送</button>
-</view>
+
+

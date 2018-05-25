@@ -21,7 +21,9 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+        console.log("用户信息", app.globalData.userInfo);
         console.log("系统信息", app.globalData.sysinfo);
+
         //获取当前设备平台以及微信版本
         if (app.getPlatform() == 'android' && this.versionCompare('6.5.7', app.getVersion())) {
             wx.showModal({
@@ -37,13 +39,75 @@ Page({
                 showCancel: false
             })
         }
+
+        // 获取用户授权信息
+        wx.getSetting({
+            success: res => {
+                console.log("获取用户的当前设置", res);
+                if (!res.authSetting['scope.userLocation']) {
+                    //获取用户的位置信息,提前向用户发起授权请求
+                    wx.authorize({
+                        scope: 'scope.userLocation',
+                        success: res => {
+                            // 用户已经同意小程序使用地图功能，后续调用 wx.getLocation 接口不会弹窗询问
+                            console.log('地图授权成功', res);
+                            this.getLocation();
+                        },
+                        fail: res => {
+                            console.log('地图授权失败', res);
+                            wx.showModal({
+                                title: '',
+                                content: '检测到您未授权定位服务，可能无法获取蓝牙设备，您确定拒绝吗？',
+                                success: res => {
+                                    console.log("拒绝授权", res);
+                                    if (res.cancel) {
+                                        wx.openSetting();   //打开设置界面
+                                    }
+                                }
+                            })
+                        }
+                    })
+                } else {
+                    this.getLocation();
+                }
+            }
+        })
+
+    },
+
+    /**
+     * 右上角分享按钮
+     */
+    onShareAppMessage: function (res) {
+        console.log("右上角分享按钮",res)    
+    },
+
+    //针对安卓手机适配，需打开地图定位功能
+    getLocation: function () {
+        var that = this;
+        wx.getLocation({
+            type: 'wgs84',
+            success: function (res) {
+                console.log("当前的位置信息获取成功", res);
+                that.startConnect();    //页面加载完成后直接开启蓝牙搜索
+            },
+            fail: function (res) {
+                console.log("当前的位置信息获取失败", res);
+
+                wx.showModal({
+                    title: '提示',
+                    content: '使用蓝牙搜索功能需打开定位服务',
+                    showCancel: false
+                })
+            }
+        })
     },
 
     /**
    * 生命周期函数--监听页面显示
    */
     onShow: function () {
-        this.startConnect();    //页面加载完成后直接开启蓝牙搜索
+        // this.startConnect();    //页面加载完成后直接开启蓝牙搜索
     },
 
     /***
@@ -80,7 +144,6 @@ Page({
 
     // 初始化蓝牙适配器
     startConnect: function () {
-
         var that = this;
 
         wx.closeBluetoothAdapter({
@@ -104,7 +167,7 @@ Page({
 
                 fail: function (err) {
 
-                    console.log(err);
+                    console.log("初始化蓝牙失败", err);
 
                     that.setData({
                         BluetoothList: []
@@ -220,14 +283,17 @@ Page({
             success: function (res) {
                 console.log('搜寻获取本机蓝牙适配器状态', res);
 
-                if (!res.isDiscovering) {
+                // if (!res.isDiscovering) {
 
-                    that.getBluetoothAdapterState();    //获取本机蓝牙适配器状态
+                //     that.getBluetoothAdapterState();    //获取本机蓝牙适配器状态
 
-                } else {
-                    that.getBluetoothDevices(); //获取所有已发现的蓝牙设备  
-                    that.onBluetoothDeviceFound();  //监听寻找到新设备的事件
-                }
+                // } else {
+                //     that.getBluetoothDevices(); //获取所有已发现的蓝牙设备  
+                //     that.onBluetoothDeviceFound();  //监听寻找到新设备的事件
+                // }
+
+                that.getBluetoothDevices(); //获取所有已发现的蓝牙设备  
+                that.onBluetoothDeviceFound();  //监听寻找到新设备的事件
 
             },
 
@@ -288,6 +354,9 @@ Page({
                  }, 5000);
                 */
             },
+            fail: function (res) {
+                console.log("获取蓝牙设备失败", res);
+            }
         })
     },
 
@@ -525,8 +594,10 @@ Page({
         var obj = e.currentTarget.dataset;
 
         console.log("点击设备", e);
+        wx.hideLoading();
 
         that.stopConnectDevices();  //配对之前先断开已连接设备
+        that.stopBluetoothDevicesDiscovery();   //停止搜索
         wx.showLoading({
             title: '正在连接，请稍后',
             mask: true
